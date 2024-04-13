@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<Html>
+
+<head>
+    <title>
+        Registration Page
+    </title>
+    <style>
+        body {
+            background-color: lightskyblue;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        input[type="submit"] {
+            height: 50px;
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+     <br>
+    <br>
+    <form action="http://localhost:4000/api/addTransectionDetails" method="post">
+        <label> Token </label>
+        <input type="text" name="tokenNumber" size="15" /> <br> <br>
+        <label> cropName </label>
+        <input type="text" name="cropName" size="15" /> <br> <br>
+        <label> price </label>
+        <input type="text" name="price" size="15" /> <br> <br>
+        <label> estimatedWeight </label>
+        <input type="text" name="estimatedWeight" size="15" /> <br> <br>
+       
+        <label> BuyerID </label>
+        <input type="text" name="buyerID" size="15" /> <br> <br>
+
+        
+        <br>
+        <div class="btn">
+            <input type="submit" value="Submit" />
+        </div>
+    </form>
+</body>
+
+</html>

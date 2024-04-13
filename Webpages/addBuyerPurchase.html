@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<Html>
+
+<head>
+    <title>
+        Registration Page
+    </title>
+    <style>
+        body {
+            background-color: lightskyblue;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        input[type="submit"] {
+            height: 50px;
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+     <br>
+    <br>
+    <form >
+        <label> Token Number </label>
+        <input type="text" id="farmerName" size="15" /> <br> <br>
+       
+        <label> mobileNumber </label>
+        <input type="text" id="mobileNumber" size="15" /> <br> <br>
+        <label> cropName </label>
+        <input type="text" id="cropName" size="15" /> <br> <br>
+      
+        <label> estimatedWeight </label>
+        <input type="text" id="estimatedWeight" size="15" /> <br> <br>
+        <label> actualWeight </label>
+        <input type="text" id="actualWeight" size="15" /> <br> <br>
+        <label> price </label>
+        <input type="text" id="price" size="15" /> <br> <br>
+        <label> totalAmount </label>
+        <input type="text" id="totalAmount" size="15" /> <br> <br>
+      
+        <div class="btn">
+            <button type="button" onclick="verify()">Verify</button>
+        </div>
+    </form>
+
+    <script>
+          function getCookie(name) {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+    return null;
+}
+        function verify(){
+         const tokenNumber=document.getElementById("farmerName").value
+         const mobileNumber=document.getElementById("mobileNumber").value
+         const cropName=document.getElementById("cropName").value
+         const estimatedWeight=document.getElementById("estimatedWeight").value
+         const actualWeight=document.getElementById("actualWeight").value
+         const price=document.getElementById("price").value
+        //  const totalAmount=document.getElementById("totalAmount").value
+
+            const data={tokenNumber,mobileNumber,cropName,estimatedWeight,price,actualWeight}
+            const token = getCookie('token');
+            const url = "http://localhost:4000/api/addBuyerPurchase";
+            // const dt="2024-04-12"
+            fetch(url, {
+                method: "POST",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ data,token })
+        
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+        }
+    </script>
+</body>
+
+</html>

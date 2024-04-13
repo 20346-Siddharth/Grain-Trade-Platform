@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Update Crop Price</title>
+</head>
+<body>
+  <h1>Update Crop Price</h1>
+  <form id="cropForm">
+    <label for="cropName">Crop Name:</label>
+    <input type="text" id="cropName" name="cropName"><br><br>
+
+    <label for="startingPrice">Starting Price:</label>
+    <input type="number" id="startingPrice" name="startingPrice"><br><br>
+
+    <label for="closingPrice">Closing Price:</label>
+    <input type="number" id="closingPrice" name="closingPrice"><br><br>
+
+    <button type="submit">Submit</button>
+    
+  </form>
+
+  <button type="button" onclick="getCrops()">getCrops</button>
+  <script>
+
+      function getCrops(){
+        fetch("http://localhost:4000/api/getAllCrops")
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => console.log(data))
+  .catch(error => console.error('Error fetching data:', error));
+
+      }
+
+    // document.getElementById('cropForm').addEventListener('submit', function(event) {
+    //   event.preventDefault();
+
+    //   const cropName = document.getElementById('cropName').value;
+    //   const startingPrice = document.getElementById('startingPrice').value;
+    //   const closingPrice = document.getElementById('closingPrice').value;
+
+    //   const data = {
+    //     cropname: cropName,
+    //     startingprice: startingPrice,
+    //     closingprice: closingPrice
+    //   };
+
+    //   fetch('http://localhost:4000/api/updateCropPrice', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(data)
+    //   })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log('Success:', data);
+    //     alert('Crop price updated successfully!');
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //     alert('Error updating crop price');
+    //   });
+    // });
+  </script>
+</body>
+</html>

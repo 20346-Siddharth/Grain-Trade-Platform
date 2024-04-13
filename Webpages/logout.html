@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button type="button" onclick="logout()">Logout</button>
+
+    <button type="button" onclick="profile()">Profile</button>
+
+    <button type="button" onclick="bookSlot()">Book Slot</button>
+
+
+    <button type="button" onclick="seeSlot()">See Slots</button>
+    <button type="button" onclick="Adminslip()">See Admin Slips</button>
+ 
+
+    <button type="button" onclick="verifyBuyer()">verifyBuyer</button>
+
+    <button type="button" onclick="buyerPurchase()">Buyer Purchase</button>
+
+    <button type="button" onclick="seeMyPurchase()">See My Purchases</button>
+
+
+
+    <script>
+        function seeMyPurchase(){
+            const token = getCookie('token');
+            const url = "http://localhost:4000/api/seeMyPurchases";
+            // const dt="2024-04-12"
+            fetch(url, {
+                method: "GET",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data) // store in state variable 
+       })
+        }
+        function buyerPurchase(){
+            window.location.href='./addBuyerPurchase.html';
+        }
+function Adminslip(){
+    const token = getCookie('token');
+            const url = "http://localhost:4000/api/getAdminSlip";
+            // const dt="2024-04-12"
+            fetch(url, {
+                method: "GET",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+}
+
+        function verifyBuyer(){
+            window.location.href='./verifybuyer.html';
+        }
+
+ function seeSlot(){
+    const token = getCookie('token');
+            const url = "http://localhost:4000/api/showTokens";
+            // const dt="2024-04-12"
+            fetch(url, {
+                method: "GET",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+
+ }
+ function bookSlot(){
+    const token = getCookie('token');
+            const url = "http://localhost:4000/api/getToken";
+            const dt="2024-04-12"
+            fetch(url, {
+                method: "POST",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+         body: JSON.stringify({ token: token,Date:dt }),
+        //  body: JSON.stringify({ token: token })
+               
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+
+ }
+
+function profile(){
+            const token = getCookie('token');
+            const url = "http://localhost:4000/api/profile";
+            fetch(url, {
+                method: "POST",
+                headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+         body: JSON.stringify({ token: token,user:{} })
+               
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+        }
+        function getCookie(name) {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName === name) {
+            return cookieValue;
+        }
+    }
+    return null;
+}
+function deleteCookie(name) {
+  document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+        function logout(){
+            const token = getCookie('token');
+            console.log(token)
+            const url = "http://localhost:4000/api/logout";
+            fetch(url, {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ token: token })
+    }).then((response)=>response.json())
+       .then((data) => {
+        // Handle response as needed
+        if(data.logout){
+            deleteCookie("token");
+            window.location.href='./login.html'
+        }
+        console.log(data);
+    }).catch(error => {
+        console.error('Logout error:', error);
+        // Handle logout error
+    });
+        }
+    </script>
+</body>
+</html>

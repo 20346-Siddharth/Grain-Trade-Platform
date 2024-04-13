@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<Html>
+
+<head>
+    <title>
+        Login Page
+    </title>
+    <style>
+        body {
+            background-color: lightskyblue;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+
+        input[type="submit"] {
+            height: 50px;
+            width: 150px;
+        }
+        form{
+            margin-top: 70;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+    <br>
+    <form>
+
+        <label> Mobile </label>
+        <input type="text" name="mobile" id="mobile" size="15" /> <br> <br>
+        <label> Password </label>
+        <input type="password" name="password" id="password" size="15" /> <br> <br>
+        <div class="btn">
+            <!-- <input type="bu" value="Submit" /> -->
+            <button type="button" onclick="register()">Login</button>
+            <button type="button" onclick="profile()">Profile</button>
+        </div>
+    </form>
+
+    <script>
+        function profile(){
+            const token = getCookie('token');
+            const url = "http://localhost:4000/api/profile";
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ token: token })
+               
+            }).then((response)=>response.json())
+       .then((data) =>{
+           console.log(data)
+       })
+        }
+
+
+        function register() {
+            const url = "http://localhost:4000/api/login";
+            const data = {
+                mobile: document.getElementById('mobile').value,
+                password: document.getElementById('password').value,
+            };
+            fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if(data.success==true){
+                        console.log(data.user)
+                        document.cookie = `token=${data.token};  path=/`;
+                        window.location.href='./logout.html'
+                    } 
+                })
+                .catch((error) => console.error(error));
+
+        }
+    </script> 
+</body>
+
+</html>

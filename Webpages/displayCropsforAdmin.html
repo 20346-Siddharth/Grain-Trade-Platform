@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Entries</title>
+</head>
+<body>
+    <h1>Crop Entries</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Crop Name</th>
+                <th>Starting Price</th>
+                <th>Closing Price</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="cropTableBody">
+            <!-- Table rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Function to fetch data from the API and populate the table
+        async function fetchCropsData() {
+            try {
+                const response = await fetch('http://localhost:4000/api/getAllCrops');
+                const data = await response.json();
+                const cropTableBody = document.getElementById('cropTableBody');
+
+                // Clear existing rows
+                cropTableBody.innerHTML = '';
+                            console.log(data)
+                // Add new rows with data from the API
+                data.crops.forEach(crop => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        
+                    <td contenteditable="true">${crop.cropname}</td>
+                        <td contenteditable="true">${crop.startingprice}</td>
+                        <td contenteditable="true">${crop.closingprice}</td>
+                        <td><button onclick="saveChanges(this, '${crop._id}')">Save</button></td>
+                    `;
+                    cropTableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // Function to handle editing a crop
+        
+        async function saveChanges(button, cropId) {
+            const row = button.parentNode.parentNode;
+            const cells = row.getElementsByTagName('td');
+
+            const updatedCrop = {
+                _id:cropId,
+                cropname: cells[0].innerText,
+                startingprice: cells[1].innerText,
+                closingprice: cells[2].innerText
+            };
+           console.log(updatedCrop)
+            try{
+                const response=await fetch("http://localhost:4000/api/updateCropPrice", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedCrop)
+                });
+
+                // const data=response.json();
+                console.log(response)
+                if(response.ok){
+                    console.log("Done")
+                }else{
+                    console.log("Something went wrong");
+                }
+
+            }catch(err){
+                console.log(err);
+            }
+
+
+        }
+        // Fetch data when the page loads
+        fetchCropsData();
+    </script>
+</body>
+</html>
