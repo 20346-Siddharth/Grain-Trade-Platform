@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Crop</title>
+</head>
+<body>
+  <h1>Search Crop</h1>
+  <input type="text" id="searchInput" placeholder="Enter crop name">
+  <button onclick="searchCrop()">Search</button>
+
+  <script>
+    function searchCrop() {
+      const searchInput = document.getElementById('searchInput').value;
+      const requestData = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ crop: searchInput })
+      };
+
+      fetch('http://localhost:4000/api/searchCrop', requestData)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('API response:', data);
+          // Handle the API response as needed
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    }
+  </script>
+</body>
+</html>

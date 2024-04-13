@@ -24,6 +24,7 @@ router.post("/logout",userAuth,loginController.logout)
 router.post('/profile',userAuth,loginController.profile)
 router.get('/getAllCrops',getCropPriceController.getCropPrice)
 router.get("/getAdminSlip",userAuth,userController.getAdminSlip)
+router.post("/searchCrop",userController.searchCrop)
 
 
 

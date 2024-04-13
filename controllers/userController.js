@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import User from '../database/models/User.js';
 import PurchaseDetailsAdmin from "../database/models/purchaseDatailsAdmin.js";
+import CropPrice from '../database/models/cropPrice.js';
 const userController={
 
     async register(req,res,next){
@@ -122,6 +123,27 @@ async getAdminSlip(req,res,next){
   }
 
   
+
+},
+
+
+async searchCrop(req,res,next){
+  const { crop } = req.body;
+const substring=crop;
+  if (!crop) {
+    return res.status(400).json({ error: 'Crop name is required' });
+  }
+const cropsDatabase = await CropPrice.find({
+  $and: [
+      { cropname: { $regex: new RegExp(substring, 'i') } }, // search for documents with the substring in the instituteName field, ignoring case sensitivity
+       ]
+});
+
+
+  // const matchingCrops = cropsDatabase.filter(c => c.includes(crop.toLowerCase()));
+
+
+  res.status(200).json({ crops: cropsDatabase });
 
 }
     
