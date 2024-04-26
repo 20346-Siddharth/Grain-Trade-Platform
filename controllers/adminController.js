@@ -3,7 +3,28 @@ import Token from "../database/models/farmerToken.js";
 import PurchaseDetailsAdmin from "../database/models/purchaseDatailsAdmin.js";
 import verifybuyer from "../database/models/verifyBuyers.js"
 const adminController= {
+    async addcrop(req,res){
+      try{  const { cropname, startingprice, closingprice } = req.body;
+        const existingCrop = await CropPrice.findOne({ cropname });
+        if(existingCrop){
+            res.json("Crop with this name already exist")
+            return;
+        }
+        const newCrop = new CropPrice({
+            cropname,
+            startingprice,
+            closingprice
+        });
+        await newCrop.save();
+        console.log('New crop price added:', newCrop);
 
+        res.json({ success: true });
+    } catch (err) {
+        console.error("Error adding or updating the crop:", err);
+        res.status(500).json({ error: "Error adding or updating the crop" });
+    }
+
+    },
    async updatecropprices(req, res, next) {
     try {
 

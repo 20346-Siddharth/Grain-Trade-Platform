@@ -6,12 +6,12 @@ const userController={
 
     async register(req,res,next){
         try{
-      const {username,email,mobile,category,account,ifsc,password}=req.body;
+      const {username,mobile,category,account,ifsc,password}=req.body;
      
       
       const registerSchema=Joi.object({
         username: Joi.string().min(3).max(20).required(),
-        email: Joi.string().email().required(),
+        // email: Joi.string().email().required(),
         mobile: Joi.string().min(10).max(10).pattern(new RegExp('^[0-9]{10}$')).required(),
         category: Joi.string().min(3).max(20).required(),
         account: Joi.string().min(8).max(15).pattern(new RegExp('^[0-9]{10}$')).required(),
@@ -35,7 +35,7 @@ const userController={
       }
 
         const user=new User({
-          username,email,mobile,category,account,ifsc,password
+          username,mobile,category,account,ifsc,password
         })
         const token=await user.generateAuthToken();
         user.save();
@@ -135,7 +135,7 @@ const substring=crop;
   }
 const cropsDatabase = await CropPrice.find({
   $and: [
-      { cropname: { $regex: new RegExp(substring, 'i') } }, // search for documents with the substring in the instituteName field, ignoring case sensitivity
+      { cropname: { $regex: new RegExp(substring, 'i') } }, 
        ]
 });
 
