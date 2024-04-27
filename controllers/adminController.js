@@ -1,6 +1,7 @@
 import CropPrice from "../database/models/cropPrice.js"
 import Token from "../database/models/farmerToken.js";
 import PurchaseDetailsAdmin from "../database/models/purchaseDatailsAdmin.js";
+import verifyBuyer from "../database/models/verifyBuyers.js";
 import verifybuyer from "../database/models/verifyBuyers.js"
 const adminController= {
     async addcrop(req,res){
@@ -106,7 +107,7 @@ const adminController= {
        console.log(buyer)
 
        const newtransection = new PurchaseDetailsAdmin({
-        tokenNumber,cropName,price,estimatedWeight,buyerID,farmer:farmer._id,buyer:buyer.buyer
+        tokenNumber,cropName,price,estimatedWeight,buyerID,farmer:farmer.user,buyer:buyer.buyer
 
        })
 
@@ -136,6 +137,10 @@ const adminController= {
       const allTransections=await PurchaseDetailsAdmin.find();
       res.json({allTransections})
 
+  },
+  async allVerifiedBuyers(req,res,next){
+    const buyers=await verifyBuyer.find();
+    res.json({buyers})
   }
 }
 

@@ -36,7 +36,7 @@ router.post("/addTransectionDetails",adminController.addTransection)
 
 router.get('/seeAllTokens',adminController.seeAllTokens)
 router.get("/seeAllTransections",adminController.seeAllTransections)
-
+router.get("/allVerifiedBuyers",adminController.allVerifiedBuyers)
 
 //farmer
 

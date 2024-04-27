@@ -24,18 +24,18 @@
   <button type="button" onclick="getCrops()">getCrops</button>
   <script>
 
-      function getCrops(){
-        fetch("http://localhost:4000/api/getAllCrops")
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => console.log(data))
-  .catch(error => console.error('Error fetching data:', error));
+  //     function getCrops(){
+  //       fetch("http://localhost:4000/api/getAllCrops")
+  // .then(response => {
+  //   if (!response.ok) {
+  //     throw new Error('Network response was not ok');
+  //   }
+  //   return response.json();
+  // })
+  // .then(data => console.log(data))
+  // .catch(error => console.error('Error fetching data:', error));
 
-      }
+  //     }
 
     // document.getElementById('cropForm').addEventListener('submit', function(event) {
     //   event.preventDefault();
