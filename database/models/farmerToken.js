@@ -28,14 +28,14 @@ const tokenSchema = new Schema({
     type: String,
     required: true
   },
-  account: {
-    type: String,
-    required: true
-  },
-  ifsc: {
-    type: String,
-    required: true
-  }
+  // account: {
+  //   type: String,
+  //   required: true
+  // },
+  // ifsc: {
+  //   type: String,
+  //   required: true
+  // }
 });
 
 const Token = mongoose.model('Token', tokenSchema);

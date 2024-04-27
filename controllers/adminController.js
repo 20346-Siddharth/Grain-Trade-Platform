@@ -25,6 +25,27 @@ const adminController= {
     }
 
     },
+
+    async deletecrop(req,res){
+    try{
+        const { cropId } = req.body;
+
+        const existingCrop = await CropPrice.findOne({ _id :cropId});
+        if (existingCrop) {
+            // Crop with the same name found, delete it
+            await CropPrice.deleteOne({ _id:cropId });
+            console.log(`Deleted existing crop: ${existingCrop}`);
+            res.json({deleted:true})
+            return;
+        }
+        else{
+            res.json({deleted:false})
+        }
+
+    }catch(err){
+        console.log(err);
+    }
+    },
    async updatecropprices(req, res, next) {
     try {
 
@@ -65,19 +86,19 @@ const adminController= {
  
 
        if(used){
-        res.json("Token already in use")
+        res.json({used:"yes"})
         return ;
        }
        const farmer=await Token.findOne({tokennumber:tokenNumber})
 
        if(!farmer){
-        res.json("No token Found")
+        res.json({farmer:"no"})
         return;
        }
 
        const buyer = await verifybuyer.findOne({buyerID:buyerID})
        if(!buyer){
-        res.json("Buyer Not Verified")
+        res.json({buyer:"no"})
         return;
        }
 
@@ -91,6 +112,7 @@ const adminController= {
 
        await newtransection.save();
        console.log("Done")
+       res.json({done:true})
 
   }, 
 

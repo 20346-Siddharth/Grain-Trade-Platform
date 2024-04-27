@@ -30,6 +30,7 @@ router.post("/searchCrop",userController.searchCrop)
 
 //Admin
 router.post('/addcrop',adminController.addcrop)
+router.delete('/deletecrop',adminController.deletecrop)
 router.post("/updateCropPrice",adminController.updatecropprices) 
 router.post("/addTransectionDetails",adminController.addTransection)
 

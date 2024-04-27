@@ -9,15 +9,16 @@ const farmerController = {
     const userBookedSlots = await Token.find({ user: req.user._id });
 
     console.log("Slots = " + userBookedSlots);
-    if (userBookedSlots.length >= 30) {
-      res.json("You can only book up to three slots at a time.");
+    if (userBookedSlots.length >= 5) {
+      res.json("You can only book up to Five slots at a time.");
     } 
     
-    else {
+    else { 
      
       let count=0;
           console.log(req.body)
            if(req.body.Date){
+            // const dt=+'T'
         const reqDate = new Date(req.body.Date).toISOString().split('T')[0]; // Get the date part from req.body.Date
 
 
@@ -76,16 +77,15 @@ const farmerController = {
       }
           
           
-      const { username, email, mobile, category, password, account, ifsc } =
+      const { username, mobile, adhar,category, password, address } =
         req.user;
       const user = new User({
         username,
-        email,
+        adhar,
         mobile,
         category,
         password,
-        account,
-        ifsc,
+       address
       });
 
       if (!user) {
@@ -111,8 +111,7 @@ const farmerController = {
         Expire: false,
         username: user.username,
         mobile: user.mobile,
-        account: user.account,
-        ifsc: user.ifsc,
+
       });
 
       try {

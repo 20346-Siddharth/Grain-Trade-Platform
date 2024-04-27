@@ -4,7 +4,7 @@ const buyerpurchaseSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    TokenNumber: {
+    tokenNumber: {
       type: String,
       required: true,
     },
