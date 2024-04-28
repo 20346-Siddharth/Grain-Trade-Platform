@@ -1,10 +1,15 @@
 import User from "../database/models/User.js";
 import Token from "../database/models/farmerToken.js";
 import buyerpurchase from "../database/models/buyerpurchase.js"
-
+import twilio from 'twilio';
+import dotenv from 'dotenv';
+dotenv.config(); 
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
 const farmerController = {
   async getToken(req, res, next) {
-    let currentDate="";
+    let currentDate=""; 
     const allToken = await Token.find();
     const userBookedSlots = await Token.find({ user: req.user._id });
 
@@ -116,6 +121,15 @@ const farmerController = {
 
       try {
         await bookedSlot.save();
+         client.messages
+    .create({
+                from: '+14125438493',
+        to: "+91"+req.user.mobile,
+        body:`Thank You ${req.user.username} for Booking Slot! Your tokennumber is ${bookedSlot.tokennumber} and Date ${bookedSlot.date}`
+    })
+    .then(message => console.log(message.sid))
+    
+     .catch(error => console.error('Error sending SMS:', error));;
         res.send(bookedSlot);
       } catch (error) {
         console.error("Error saving booked slot:", error.message);

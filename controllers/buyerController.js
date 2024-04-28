@@ -1,8 +1,12 @@
-
+import dotenv from 'dotenv';
+dotenv.config(); 
 import verifyBuyer from "../database/models/verifyBuyers.js"
 import buyerpurchase from "../database/models/buyerpurchase.js"
 import Token from "../database/models/farmerToken.js"
-
+import twilio from 'twilio';
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
 const buyerController={
 
       
@@ -23,6 +27,15 @@ console.log(req.body.data)
 
         try{
             await buyer.save();
+            client.messages
+            .create({
+                        from: '+14125438493',
+                to: "+91"+req.user.mobile,
+                body:`Thank You ${req.user.username} for Verifying With Us ! Your Buyer ID is ${buyer.buyerID}`
+            })
+            .then(message => console.log(message.sid))
+            
+             .catch(error => console.error('Error sending SMS:', error));;
             res.json({buyer:buyer})
         }catch(error){ 
             console.log(error) 
@@ -53,6 +66,19 @@ console.log(req.body.data)
 
        try{
         await newPurchase.save();
+        client.messages
+        .create({
+                    from: '+14125438493',
+            to: "+91"+farmer.mobile,
+            body:`${farmer.username},Your bill for Token Number ${newPurchase.tokenNumber} is 
+                  Crop Name: ${newPurchase.cropName}
+                  Actual Weight :${newPurchase.actualWeight}
+                  Price:${newPurchase.price}
+                  Amount : ${newPurchase.totalAmount}`
+        })
+        .then(message => console.log(message.sid))
+        
+        
         res.json(newPurchase)
         res.json({done:true})
     }catch(error){
