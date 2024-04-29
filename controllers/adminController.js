@@ -122,10 +122,10 @@ const adminController= {
     try {
         
         const allTokens =  await Token.find();
-        const activeTokens = allTokens.filter((token) => !token.Expire);
-        const expiredTokens = allTokens.filter((token) => token.Expire);
+        const activeTokens = allTokens.filter((token) => token.Expire);
+        const expiredTokens = allTokens.filter((token) => !token.Expire);
     
-        res.send({ activeTokens, expiredTokens });
+        res.send({ activeTokens, expiredTokens }); 
       } catch (error) {
         next(error); // Pass any errors to the error handler
       }
@@ -141,7 +141,65 @@ const adminController= {
   async allVerifiedBuyers(req,res,next){
     const buyers=await verifyBuyer.find();
     res.json({buyers})
-  }
+  },
+  async search_view_all_common_slips(req,res,next){
+    const { crop } = req.body;
+    const substring=crop;
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+    const cropsDatabase = await PurchaseDetailsAdmin.find({
+      $and: [
+          { tokenNumber: { $regex: new RegExp(substring, 'i') } }, 
+           ]
+    });
+    
+    
+      // const matchingCrops = cropsDatabase.filter(c => c.includes(crop.toLowerCase()));
+    
+    
+      res.status(200).json({ crops: cropsDatabase });
+    
+  },
+  async search_view_all_verified_buyers(req, res, next) {
+    try {
+      const { crop } = req.body;
+      const substring = crop;
+  
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+  
+      const cropsDatabase = await verifyBuyer.find({
+        $and: [{ buyerID: substring }],
+      });
+  
+      res.status(200).json({ crops: cropsDatabase });
+    } catch (error) {
+      console.error('Error in search_view_all_tokens:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  async search_view_all_tokens(req, res, next) {
+    try {
+      const { crop } = req.body;
+      const substring = crop;
+  
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+  
+      const cropsDatabase = await Token.find({
+        $and: [{ tokennumber: substring }],
+      });
+  
+      res.status(200).json({ crops: cropsDatabase });
+    } catch (error) {
+      console.error('Error in search_view_all_tokens:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  
 }
 
 export default adminController

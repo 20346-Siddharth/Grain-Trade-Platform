@@ -142,8 +142,8 @@ const farmerController = {
     try {
       const userTokens = await Token.find({ user: req.user._id });
   
-      const activeTokens = userTokens.filter((token) => !token.Expire);
-      const expiredTokens = userTokens.filter((token) => token.Expire);
+      const activeTokens = userTokens.filter((token) => token.Expire);
+      const expiredTokens = userTokens.filter((token) => !token.Expire);
   
       res.send({ activeTokens, expiredTokens });
     } catch (error) {
@@ -156,6 +156,48 @@ const farmerController = {
 
     const previousFarmerSells = await buyerpurchase.find({farmerId:req.user._id})
     res.json({previousFarmerSells})
+  },
+  async search_view_token(req,res){
+    try {
+      const { crop } = req.body;
+      const substring = crop;
+  
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+  
+      const userId = req.user._id; // Assuming req.user contains the logged-in user's details
+  
+      const cropsDatabase = await Token.find({
+        $and: [{ user: userId }, { tokennumber: substring }],
+      });
+      console.log("Admin Slips for trader crops:", cropsDatabase);
+      res.status(200).json({ crops: cropsDatabase });
+    } catch (error) {
+      console.error('Error in search_see_purchase:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  async search_view_bills(req,res){
+    try {
+      const { crop } = req.body;
+      const substring = crop;
+  
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+  
+      const userId = req.user._id; // Assuming req.user contains the logged-in user's details
+  
+      const cropsDatabase = await buyerpurchase.find({
+        $and: [{ farmerId: userId }, { tokennumber: substring }],
+      });
+      console.log("Admin Slips for trader crops:", cropsDatabase);
+      res.status(200).json({ crops: cropsDatabase });
+    } catch (error) {
+      console.error('Error in search_see_purchase:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   }
  
 };

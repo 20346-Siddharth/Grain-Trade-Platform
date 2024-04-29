@@ -4,6 +4,7 @@ import verifyBuyer from "../database/models/verifyBuyers.js"
 import buyerpurchase from "../database/models/buyerpurchase.js"
 import Token from "../database/models/farmerToken.js"
 import twilio from 'twilio';
+import PurchaseDetailsAdmin from '../database/models/purchaseDatailsAdmin.js';
 const accountSid = process.env.ACCOUNT_SID;
 const authToken = process.env.AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
@@ -93,7 +94,51 @@ console.log(req.body.data)
     const seeMyPurchase = await buyerpurchase.find({user:req.user._id})
     res.json({seeMyPurchase})
 
-   }
+   },
+   async search_see_purchase(req, res) {
+    try {
+      const { crop } = req.body;
+      const substring = crop;
+  
+      if (!crop) {
+        return res.status(400).json({ error: 'Crop name is required' });
+      }
+  
+      const userId = req.user._id; // Assuming req.user contains the logged-in user's details
+  
+      const cropsDatabase = await buyerpurchase.find({
+        $and: [{ user: userId }, { tokenNumber: substring }],
+      });
+      console.log("Purchased crops:", cropsDatabase);
+      res.status(200).json({ crops: cropsDatabase });
+    } catch (error) {
+      console.error('Error in search_see_purchase:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  },
+  async search_View_Common_Slip(req,res){
+    try {
+        const { crop } = req.body;
+        const substring = crop;
+    
+        if (!crop) {
+          return res.status(400).json({ error: 'Crop name is required' });
+        }
+    
+        const userId = req.user._id; // Assuming req.user contains the logged-in user's details
+    
+        const cropsDatabase = await PurchaseDetailsAdmin.find({
+          $and: [{ buyer: userId }, { tokenNumber: substring }],
+        });
+        console.log("Admin Slips for trader crops:", cropsDatabase);
+        res.status(200).json({ crops: cropsDatabase });
+      } catch (error) {
+        console.error('Error in search_see_purchase:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+  }
+  
+
 }
 
 export default buyerController

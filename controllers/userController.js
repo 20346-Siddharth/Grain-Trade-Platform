@@ -120,7 +120,7 @@ async getAdminSlip(req,res,next){
   }else{
     const slips = await PurchaseDetailsAdmin.find({farmer:req.user._id})
     console.log(slips)
-    res.json(slips)
+    res.json({slips})
   }
 
   
